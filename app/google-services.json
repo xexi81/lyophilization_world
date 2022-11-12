@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "70416802402",
+    "project_id": "lyophilization-world",
+    "storage_bucket": "lyophilization-world.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70416802402:android:d559fc7578033d8fd5e73b",
+        "android_client_info": {
+          "package_name": "com.los3molineros.lyophilization_world"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70416802402-d2evap7qgt18ojp03dv5cdps5v7tpg84.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.los3molineros.lyophilization_world",
+            "certificate_hash": "e3d28b6371eddf6861adae14f67def19e8eb9ee2"
+          }
+        },
+        {
+          "client_id": "70416802402-3hj40vbgh6ng90fv6d9vef026jo0n82q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARSZAf24Z9ZcJGfj4Um5t0aSijHKi1oZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70416802402-3hj40vbgh6ng90fv6d9vef026jo0n82q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

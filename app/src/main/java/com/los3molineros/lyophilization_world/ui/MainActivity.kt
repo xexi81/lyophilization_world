@@ -1,4 +1,4 @@
-package com.los3molineros.lyophilization_world
+package com.los3molineros.lyophilization_world.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    throw RuntimeException("Test Crash")
                     Greeting("Android")
                 }
             }

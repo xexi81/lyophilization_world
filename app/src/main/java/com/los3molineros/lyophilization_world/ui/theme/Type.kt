@@ -21,6 +21,13 @@ val Typography = Typography(
         fontFamily = app_antic
     ),
 
+    h2 = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        fontFamily = app_antic
+    ),
+
+
     body1 = TextStyle(
         fontFamily = app_antic,
         fontSize = 14.sp,

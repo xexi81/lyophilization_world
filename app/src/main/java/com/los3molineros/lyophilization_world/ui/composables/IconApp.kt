@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -19,6 +20,7 @@ import com.los3molineros.lyophilization_world.R
 
 @Composable
 fun IconApp(
+    modifier: Modifier = Modifier,
     imageVector: ImageVector? = null,
     resource: Int? = null,
     size: Dp = 50.dp,
@@ -27,18 +29,18 @@ fun IconApp(
     isCircleShape: Boolean = false,
     isBadgeBox: Boolean = false,
     badgeText: String = "",
-    iconClicked: () -> Unit = {}
+    iconClicked: () -> Unit = {},
 ) {
     if (isBadgeBox) {
         BadgedBox(
             badge = { Badge { Text(badgeText) } },
             content = { ImageIcon(imageVector, resource, size, tint)} ,
-            modifier = Modifier.clickable { iconClicked() }
+            modifier = modifier.clickable { iconClicked() }
         )
     } else
     {
         IconButton(
-            modifier = Modifier
+            modifier = modifier
                 .size(size)
                 .padding(1.dp)
                 .then(

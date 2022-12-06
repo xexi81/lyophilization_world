@@ -9,11 +9,10 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,88 +27,97 @@ import java.io.File
 @OptIn(com.google.accompanist.permissions.ExperimentalPermissionsApi::class)
 @Composable
 fun PhotoApp(
-    showCamera: Boolean = false,
-    showCameraClick: () -> Unit = {},
-    hideCameraClick: () -> Unit = {},
-    onPhotoDoneClick: (Uri?) -> Unit = {},
     imageUri: Uri? = null,
 ) {
     val context = LocalContext.current
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
+    //States
+    var image by remember { mutableStateOf(imageUri) }
+    var showCameraState by remember { mutableStateOf(false)}
+
+    // Response from gallery
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
-        onPhotoDoneClick(uri)
+        image = uri
     }
 
     Lyophilization_worldTheme {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.primaryVariant)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = Color.White,
+            border = BorderStroke(1.dp, Color.LightGray),
+            elevation = 8.dp,
         ) {
-            Card(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(4.dp),
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = Color.White,
-                border = BorderStroke(1.dp, Color.LightGray),
-                elevation = 8.dp,
+                    .wrapContentHeight()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
-                Column(
+                Text(
+                    text = "Post image",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.h2
+                )
+
+                if (showCameraState) {
+                    CameraApp(
+                        directory = getDirectory(context),
+                        onPhotoDone =
+                        { photo ->
+                            image = photo
+                            showCameraState = showCameraState.not()
+                        },
+                        onBackClick = {
+                            showCameraState = showCameraState.not()
+                        }
+                    )
+                } else {
+                    Image(
+                        painter = rememberImagePainter(image),
+                        alignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .height(300.dp)
+                            .border(BorderStroke(1.dp, Color.LightGray))
+                            .padding(8.dp),
+                        contentDescription = null,
+                    )
+                }
+
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .padding(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Post image",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.h2
-                    )
-
-                    Divider(thickness = 1.dp, color = Color.LightGray)
-
-                    if (showCamera) {
-                        CameraApp(getDirectory(context),
-                            onPhotoDone = { onPhotoDoneClick(it) },
-                            onBackClick = { hideCameraClick() }
-                        )
-                    } else {
-                        Image(
-                            painter = rememberImagePainter(imageUri),
-                            contentScale = ContentScale.Crop,
-                            alignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxWidth(1f)
-                                .height(200.dp)
-                                .padding(8.dp)
-                                .border(BorderStroke(1.dp, Color.LightGray)),
-                            contentDescription = null,
-                        )
-                    }
-
-                    Row (
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    )
-                    {
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                )
+                {
+                    if (!showCameraState) {
                         Icon(
-                            modifier = Modifier.size(50.dp).clickable {
-                                if (!showCamera) {
-                                    cameraPermissionState.launchPermissionRequest()
-                                    showCameraClick()
-                                }                               
-                            },
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clickable {
+                                    if (!showCameraState) {
+                                        cameraPermissionState.launchPermissionRequest()
+                                        showCameraState = showCameraState.not()
+                                    }
+                                },
                             painter = painterResource(id = R.drawable.ic_camara),
                             contentDescription = null,
                             tint = Color.Gray
                         )
 
                         Icon(
-                            modifier = Modifier.size(50.dp).clickable { launcher.launch("image/*") },
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clickable { launcher.launch("image/*") },
                             painter = painterResource(id = R.drawable.ic_galeria),
                             contentDescription = null,
                             tint = Color.Gray

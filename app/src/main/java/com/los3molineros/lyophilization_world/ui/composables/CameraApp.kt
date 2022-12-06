@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -44,6 +46,7 @@ fun CameraApp(
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
 
+
     SimpleCameraPreview(
         context = context,
         lifeCycleOwner = lifeCycleOwner,
@@ -62,43 +65,54 @@ fun SimpleCameraPreview(
     onBackClick: () -> Unit = {},
 ) {
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context)}
+    val cameraProvider = cameraProviderFuture.get()
     var imageCapture: ImageCapture? by remember { mutableStateOf(null)}
     var preview by remember { mutableStateOf<Preview?>(null) }
-    val camera: Camera? = null
+    val executor = ContextCompat.getMainExecutor(context)
+
     var lensFacing by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK)}
     var flashEnabled by remember { mutableStateOf(false)}
-    var flashRes by remember { mutableStateOf( R.drawable.heart)}
-    val executor = ContextCompat.getMainExecutor(context)
-    var cameraSelector: CameraSelector?
-    val cameraProvider = cameraProviderFuture.get()
 
-    Box {
+    lateinit var cameraControl: CameraControl
+    lateinit var cameraInfo: CameraInfo
+    lateinit var cameraResponse: CameraResponse
+
+
+    Box (modifier = Modifier
+        .fillMaxWidth(1f)
+        .height(300.dp)
+        .border(BorderStroke(1.dp, Color.LightGray)))
+        {
         AndroidView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape = RectangleShape),
             factory = {
                 val previewView = PreviewView(context)
                 cameraProviderFuture.addListener({
-                    val imageAnalysis = ImageAnalysis.Builder()
+                    ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
                         .apply {
                             setAnalyzer(executor, FaceAnalyzer())
                         }
+
                     imageCapture = ImageCapture.Builder()
                         .setTargetRotation(previewView.display.rotation)
                         .build()
 
-                    val cameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
-
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        lifeCycleOwner,
-                        cameraSelector,
-                        imageCapture,
-                        preview
+                    cameraResponse = buildCamera(
+                        cameraSelection = CameraSelector.LENS_FACING_BACK,
+                        enableTorch = flashEnabled,
+                        cameraProvider = cameraProvider,
+                        lifeCycleOwner = lifeCycleOwner,
+                        imageCapture = imageCapture,
+                        preview = preview
                     )
+
+                    cameraControl = cameraResponse.cameraControl
+                    cameraInfo = cameraResponse.cameraInfo
+
                 }, executor)
                 preview = Preview.Builder().build().also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
@@ -108,7 +122,7 @@ fun SimpleCameraPreview(
         )
 
 
-
+        // Back arrow
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -123,7 +137,7 @@ fun SimpleCameraPreview(
             }
         }
 
-
+        // Box with flash, turn camera and takea photo
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -138,16 +152,15 @@ fun SimpleCameraPreview(
                 .align(Alignment.BottomCenter)
         ) {
             IconButton(onClick = {
-                camera?.let {
-                    if (it.cameraInfo.hasFlashUnit()) {
+                try {
+                    if (cameraInfo.hasFlashUnit()) {
                         flashEnabled = !flashEnabled
-                        flashRes = if (flashEnabled) R.drawable.ic_flash_off else R.drawable.ic_flash_on
-                        it.cameraControl.enableTorch(flashEnabled)
+                        cameraControl.enableTorch(flashEnabled)
                     }
-                }
+                } catch (e: Exception) {}
             }) {
                 Icon(
-                    painter = painterResource(id = flashRes),
+                    painter = painterResource(id = if (flashEnabled) R.drawable.ic_flash_on else R.drawable.ic_flash_off),
                     contentDescription = null,
                     modifier = Modifier.size(25.dp),
                     tint = MaterialTheme.colors.surface
@@ -194,31 +207,67 @@ fun SimpleCameraPreview(
 
             IconButton(onClick = {
                 lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
-                cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(lensFacing)
-                    .build()
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    lifeCycleOwner,
-                    cameraSelector as CameraSelector,
-                    imageCapture,
-                    preview
+
+                cameraResponse = buildCamera(
+                    cameraSelection = lensFacing,
+                    enableTorch = flashEnabled,
+                    cameraProvider = cameraProvider,
+                    lifeCycleOwner = lifeCycleOwner,
+                    imageCapture = imageCapture,
+                    preview = preview
                 )
+
+                cameraControl = cameraResponse.cameraControl
+                cameraInfo = cameraResponse.cameraInfo
             }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.heart),
+                    painter = painterResource(id = R.drawable.ic_flip_camera),
                     contentDescription = null,
                     modifier = Modifier.size(25.dp),
                     tint = MaterialTheme.colors.surface
                 )
             }
         }
-
-
-
     }
+
+
 }
+
+private fun buildCamera(
+    cameraSelection: Int,
+    enableTorch: Boolean,
+    cameraProvider: ProcessCameraProvider,
+    lifeCycleOwner: LifecycleOwner,
+    imageCapture: ImageCapture?,
+    preview: Preview?
+): CameraResponse {
+    val cameraSelector = CameraSelector.Builder()
+        .requireLensFacing(cameraSelection)
+        .build()
+
+    cameraProvider.unbindAll()
+
+    val build = cameraProvider.bindToLifecycle(
+        lifeCycleOwner,
+        cameraSelector,
+        imageCapture,
+        preview)
+
+    val cameraControl = build.cameraControl
+    val cameraInfo = build.cameraInfo
+
+    cameraControl.enableTorch(enableTorch)
+
+    return CameraResponse(cameraSelector, cameraControl, cameraInfo)
+}
+
+
+data class CameraResponse(
+    val cameraSelector: CameraSelector,
+    val cameraControl: CameraControl,
+    val cameraInfo: CameraInfo
+)
 
 private class FaceAnalyzer(): ImageAnalysis.Analyzer {
     @SuppressLint("UnsafeOptInUsageError")

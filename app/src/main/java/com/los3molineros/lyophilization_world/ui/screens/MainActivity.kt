@@ -1,4 +1,4 @@
-package com.los3molineros.lyophilization_world.ui
+package com.los3molineros.lyophilization_world.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.los3molineros.lyophilization_world.ui.NavigationComponent
 import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,23 +22,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    throw RuntimeException("Test Crash")
-                    Greeting("Android")
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setSystemBarsColor(color = Color.Transparent)
+
+                    NavigationComponent()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Lyophilization_worldTheme {
-        Greeting("Android")
     }
 }

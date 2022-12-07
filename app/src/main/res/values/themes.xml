@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.Lyophilization_world" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.LyophilizationWorld" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >@color/transparent</item>
+        <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.LyophilizationWorld.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
+    <style name="Theme.LyophilizationWorld.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.LyophilizationWorld.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Lyophilization_world</string>
+    <string name="app_name">Lyophilization world</string>
+
+    <!-- drawer content -->
+    <string name="contact_us">Contact Us</string>
+    <string name="about_us">About Us</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>

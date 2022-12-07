@@ -1,4 +1,4 @@
-package com.los3molineros.lyophilization_world.data
+package com.los3molineros.lyophilization_world.data.model
 
 import java.util.*
 

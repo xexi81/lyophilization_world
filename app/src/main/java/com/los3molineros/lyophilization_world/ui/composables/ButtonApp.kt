@@ -26,7 +26,7 @@ fun ButtonApp(
     isTextButton: Boolean = false,
     image: Int? = null
     ) {
-    Lyophilization_worldTheme() {
+    Lyophilization_worldTheme {
         val margin = if (icon==null) 5 else 0
 
         if (isTextButton) {
@@ -67,7 +67,7 @@ fun ButtonApp(
                         Image(
                             painterResource(id = it),
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp))
+                            modifier = Modifier.size(50.dp))
                     }
 
                     Text(

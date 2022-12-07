@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.los3molineros.lyophilization_world.R
 import com.los3molineros.lyophilization_world.common.getPostDate
-import com.los3molineros.lyophilization_world.data.Post
+import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
 import java.util.*
 

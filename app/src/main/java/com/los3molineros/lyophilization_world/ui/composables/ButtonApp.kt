@@ -1,6 +1,7 @@
 package com.los3molineros.lyophilization_world.ui.composables
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -22,7 +23,8 @@ fun ButtonApp(
     textButton: String = "",
     onClickButton: () -> Unit = {},
     icon: Int? = null,
-    isTextButton: Boolean = false
+    isTextButton: Boolean = false,
+    image: Int? = null
     ) {
     Lyophilization_worldTheme() {
         val margin = if (icon==null) 5 else 0
@@ -39,8 +41,7 @@ fun ButtonApp(
         } else {
             Button(
                 onClick = { onClickButton() },
-                modifier
-                    .wrapContentHeight(),
+                modifier,
                 shape = RectangleShape,
                 border = BorderStroke(0.dp, Color.Black),
                 colors = ButtonDefaults.buttonColors(
@@ -48,7 +49,9 @@ fun ButtonApp(
                 ),
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = margin.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = margin.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -56,8 +59,15 @@ fun ButtonApp(
                         Icon(
                             painter = painterResource(id = it),
                             contentDescription = null,
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.size(40.dp)
                         )
+                    }
+
+                    image?.let {
+                        Image(
+                            painterResource(id = it),
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp))
                     }
 
                     Text(
@@ -82,7 +92,9 @@ fun ButtonApp(
 fun ButtonPreview() {
     Column() {
         ButtonApp(
-            modifier = Modifier.fillMaxWidth().padding(all = 20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 20.dp),
             textButton = "Sign in",
             onClickButton = {},
             isTextButton = false
@@ -96,7 +108,9 @@ fun ButtonPreview() {
         )
 
         ButtonApp(
-            modifier = Modifier.fillMaxWidth().padding(all = 20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 20.dp),
             textButton = "Sign in",
             onClickButton = {},
             isTextButton = false,
@@ -107,7 +121,9 @@ fun ButtonPreview() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ButtonApp(
-                modifier = Modifier.weight(1f).padding(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(10.dp),
                 textButton = "Sign in",
                 onClickButton = {},
                 isTextButton = false,
@@ -115,7 +131,9 @@ fun ButtonPreview() {
             )
 
             ButtonApp(
-                modifier = Modifier.weight(1f).padding(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(10.dp),
                 textButton = "Sign in",
                 onClickButton = {},
                 isTextButton = false,
@@ -127,7 +145,9 @@ fun ButtonPreview() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ButtonApp(
-                modifier = Modifier.weight(1f).padding(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(10.dp),
                 textButton = "Sign in",
                 onClickButton = {},
                 isTextButton = false,
@@ -135,7 +155,9 @@ fun ButtonPreview() {
             )
 
             ButtonApp(
-                modifier = Modifier.weight(1f).padding(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(10.dp),
                 textButton = "Sign in",
                 onClickButton = {},
                 isTextButton = false,
@@ -143,7 +165,9 @@ fun ButtonPreview() {
             )
 
             ButtonApp(
-                modifier = Modifier.weight(1f).padding(10.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(10.dp),
                 textButton = "Sign in",
                 onClickButton = {},
                 isTextButton = false,

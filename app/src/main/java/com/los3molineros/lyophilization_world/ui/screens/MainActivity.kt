@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val systemUiController = rememberSystemUiController()
-                    systemUiController.setSystemBarsColor(color = Color.Transparent)
+                    systemUiController.setSystemBarsColor(color = Color.Black)
 
                     NavigationComponent()
                 }

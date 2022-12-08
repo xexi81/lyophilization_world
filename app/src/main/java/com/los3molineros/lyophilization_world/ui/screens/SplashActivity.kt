@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
@@ -22,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.los3molineros.lyophilization_world.R
 import com.los3molineros.lyophilization_world.ui.composables.ButtonApp
 import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
@@ -31,7 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashActivity(
-    onLoginWithEmailClick: () -> Unit = {}
+    onLoginWithEmailClick: () -> Unit = {},
+    continueToPost: () -> Unit = {}
 ) {
     Lyophilization_worldTheme {
         val context = LocalContext.current
@@ -72,6 +71,10 @@ fun SplashActivity(
                 }
             }
 
+            if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == true) {
+                continueToPost()
+            }
+
             if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == false) {
                 Column(
                     modifier = Modifier
@@ -82,7 +85,7 @@ fun SplashActivity(
                     ButtonApp(
                         modifier = Modifier.height(50.dp),
                         textButton = context.getString(R.string.login_email),
-                        image = R.drawable.email,
+                        image = R.drawable.ic_email,
                         onClickButton = { onLoginWithEmailClick() }
                     )
 
@@ -91,7 +94,7 @@ fun SplashActivity(
                     ButtonApp(
                         modifier = Modifier.height(50.dp),
                         textButton = context.getString(R.string.login_google),
-                        image = R.drawable.ic__google,
+                        image = R.drawable.ic_google,
                         onClickButton = {}
                     )
                 }

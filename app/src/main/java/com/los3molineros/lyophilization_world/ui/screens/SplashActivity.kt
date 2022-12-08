@@ -72,6 +72,7 @@ fun SplashActivity(
             }
 
             if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == true) {
+                viewModel.restartData()
                 continueToPost()
             }
 

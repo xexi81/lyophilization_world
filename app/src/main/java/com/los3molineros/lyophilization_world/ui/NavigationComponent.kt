@@ -25,13 +25,13 @@ fun NavigationComponent() {
 
         composable( route = "firebaseEmailScreen") {
             LoginWithEmailActivity(
-                onBackPressed = { navController.popBackStack() }
+                onBackPressed = { navController.popBackStack() },
+                onLoginSuccessfully = { navController.navigate( "postScreen")}
             )
         }
 
         composable( route = "postScreen") {
-            PostActivity()
+            PostActivity { navController.popBackStack() }
         }
-
     }
 }

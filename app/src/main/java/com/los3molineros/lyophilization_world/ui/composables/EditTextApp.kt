@@ -47,7 +47,8 @@ fun EditTextApp(
                 focusedIndicatorColor = Color.Gray,
                 unfocusedIndicatorColor = Color.LightGray,
                 disabledIndicatorColor = Color.LightGray,
-                cursorColor = Color.LightGray
+                cursorColor = Color.LightGray,
+                placeholderColor = Color.LightGray
             )
         )
 

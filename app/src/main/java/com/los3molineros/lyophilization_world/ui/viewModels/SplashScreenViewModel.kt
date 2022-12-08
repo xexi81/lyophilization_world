@@ -32,6 +32,9 @@ class SplashScreenViewModel(
         getFirebaseUser()
     }
 
+    fun restartData() {
+        _userAlreadyLoggedState.value = false
+    }
 
     private fun getDefaultTime() {
         viewModelScope.launch(Dispatchers.IO) {

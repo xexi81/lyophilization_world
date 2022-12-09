@@ -9,4 +9,5 @@ interface FirebaseAuthRepository {
     suspend fun loginUser(email:String, password: String): FirebaseUser?
     suspend fun rememberPassword(email: String)
     suspend fun signInWithCredentials(credential: AuthCredential)
+    fun signOut()
 }

@@ -14,6 +14,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +30,7 @@ import com.los3molineros.lyophilization_world.BuildConfig
 import com.los3molineros.lyophilization_world.R
 import com.los3molineros.lyophilization_world.common.AppConstants
 import com.los3molineros.lyophilization_world.data.model.Post
+import com.los3molineros.lyophilization_world.data.model.User
 import com.los3molineros.lyophilization_world.ui.composables.DrawerContentApp
 import com.los3molineros.lyophilization_world.ui.composables.FloatingButton
 import com.los3molineros.lyophilization_world.ui.composables.PostTopBar
@@ -45,7 +47,9 @@ fun PostActivity(
     Lyophilization_worldTheme {
         val context = LocalContext.current
         val viewModel = koinViewModel<PostViewModel>()
-        val postList : List<Post> = listOf()
+
+        val postList: List<Post> by viewModel.postListState.collectAsState()
+        val user: User? by viewModel.firebaseUserState.collectAsState()
 
         // Lateral panel
         val scaffoldState = rememberScaffoldState()
@@ -54,7 +58,7 @@ fun PostActivity(
         Scaffold(
             scaffoldState = scaffoldState,
             modifier = Modifier.fillMaxSize(1f),
-            floatingActionButton = { FloatingButton() },
+            floatingActionButton = { if (user?.admin == true) FloatingButton() },
             isFloatingActionButtonDocked = true,
             topBar = {
                 PostTopBar(
@@ -68,7 +72,7 @@ fun PostActivity(
                         }
                     },
                     leading = null,
-                    imageLeading = viewModel.firebaseUserState.value?.photo,
+                    imageLeading = user?.photo,
                     leadModifier = Modifier
                         .padding(start = 5.dp)
                         .size(50.dp)
@@ -77,50 +81,28 @@ fun PostActivity(
                 )
             },
             drawerContent = { DrawerContentApp(
-                onContactClick = { contactUs(context) },
-                onRateClick = { rateUs(context) },
+                onContactClick = { viewModel.contactUs(context) },
+                onRateClick = { viewModel.rateUs(context) },
                 onSignOutClick = {
-                    signOut(context)
+                    viewModel.signOut(context)
                     onBackClick()
                 }
             )},
             content = {
                 LazyColumn {
-                    items(items = viewModel.postListState.value, itemContent = { item ->
-                        PostUI(post = item, comments = R.drawable.comment, favourite = false, adminUser = false)
+                    items(items = postList, itemContent = { item ->
+                        PostUI(
+                            post = item,
+                            comments = item.postComments.size,
+                            favourite = item.postFavourites.any { it.user == viewModel.firebaseUserState.value?.uid },
+                            adminUser = user?.admin ?: false,
+                            imageClicked = { viewModel.imageClicked(context, item.link) },
+                            favouriteClicked = { viewModel.favouriteClicked(item.title)}
+                        )
                     })
                 }
             } )
     }
 
-}
-
-private fun contactUs(context: Context) {
-    val goToMarket = Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse(AppConstants.CONTACT_US)
-    )
-    context.startActivity(goToMarket)
-}
-
-
-private fun rateUs(context: Context) {
-    val goToMarket = Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("${AppConstants.APP_STORE}${BuildConfig.APPLICATION_ID}")
-    )
-    context.startActivity(goToMarket)
-}
-
-private fun signOut(context: Context) {
-    Firebase.auth.signOut()
-    GoogleSignIn
-        .getClient(
-            context,
-            GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .build()
-        )
-        .signOut()
 }
 

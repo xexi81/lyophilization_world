@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FirestoreUserImpl(private val firebaseFirestore: FirebaseFirestore): FirestoreUserRepository {
-    private val sdf = SimpleDateFormat("EEE, d MMM yyyy")
 
     override suspend fun createUser(
         uid: String?,
@@ -17,11 +16,14 @@ class FirestoreUserImpl(private val firebaseFirestore: FirebaseFirestore): Fires
         email: String?,
         photoUrl: String?
     ) {
-        val currentDate: String = sdf.format(Date())
 
         uid?.let {
-            val user = User(uid, displayName, email, providerId, photoUrl)
-            firebaseFirestore.collection("users").document(uid).set(user)
+            val document = firebaseFirestore.collection("users").document(uid).get().await()
+
+            if (document.data.isNullOrEmpty()) {
+                val user = User(uid, displayName, email, providerId, photoUrl)
+                firebaseFirestore.collection("users").document(uid).set(user)
+            }
         }
     }
 

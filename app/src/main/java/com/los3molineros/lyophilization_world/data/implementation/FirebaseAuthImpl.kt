@@ -28,4 +28,8 @@ class FirebaseAuthImpl(private val firebaseAuth: FirebaseAuth): FirebaseAuthRepo
     override suspend fun signInWithCredentials(credential: AuthCredential) {
         firebaseAuth.signInWithCredential(credential).await()
     }
+
+    override fun signOut() {
+        firebaseAuth.signOut()
+    }
 }

@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +34,8 @@ fun PostUI(
     editClicked: () -> Unit = {}
     ) {
     Lyophilization_worldTheme() {
+        var favouriteState by remember{ mutableStateOf(favourite)}
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -59,7 +61,7 @@ fun PostUI(
                 )
                 Text(
                     text = post.title,
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     maxLines = 2,
@@ -74,7 +76,9 @@ fun PostUI(
                         .clickable { imageClicked() }
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp),
                     horizontalArrangement = Arrangement.Start
                 )
                 {
@@ -90,11 +94,14 @@ fun PostUI(
                     )
                     IconApp(
                         imageVector = null,
-                        resource = if (favourite) R.drawable.full_heart else R.drawable.heart,
+                        resource = if (favouriteState) R.drawable.full_heart else R.drawable.heart,
                         size = 30.dp,
-                        tint = if (favourite) Color.Red else Color.Gray,
+                        tint = if (favouriteState) Color.Red else Color.Gray,
                         isCircleShape = false,
-                        iconClicked = { favouriteClicked() },
+                        iconClicked = {
+                            favouriteClicked()
+                            favouriteState = !favouriteState
+                        },
                         modifier = Modifier.padding(start = 20.dp)
                     )
 

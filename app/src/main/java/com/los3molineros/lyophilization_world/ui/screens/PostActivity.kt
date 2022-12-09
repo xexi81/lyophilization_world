@@ -1,8 +1,5 @@
 package com.los3molineros.lyophilization_world.ui.screens
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,13 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.los3molineros.lyophilization_world.BuildConfig
 import com.los3molineros.lyophilization_world.R
-import com.los3molineros.lyophilization_world.common.AppConstants
 import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.data.model.User
 import com.los3molineros.lyophilization_world.ui.composables.DrawerContentApp
@@ -42,7 +33,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PostActivity(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onCommentClick: (Post) -> Unit = {}
 ) {
     Lyophilization_worldTheme {
         val context = LocalContext.current
@@ -97,7 +89,8 @@ fun PostActivity(
                             favourite = item.postFavourites.any { it.user == viewModel.firebaseUserState.value?.uid },
                             adminUser = user?.admin ?: false,
                             imageClicked = { viewModel.imageClicked(context, item.link) },
-                            favouriteClicked = { viewModel.favouriteClicked(item.title)}
+                            favouriteClicked = { viewModel.favouriteClicked(item.title)},
+                            commentClicked = { onCommentClick(item) }
                         )
                     })
                 }

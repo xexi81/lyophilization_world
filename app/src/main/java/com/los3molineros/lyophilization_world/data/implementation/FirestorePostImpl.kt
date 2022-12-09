@@ -2,7 +2,6 @@ package com.los3molineros.lyophilization_world.data.implementation
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.los3molineros.lyophilization_world.data.model.Favourite
 import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.data.model.PostFavourite
 import com.los3molineros.lyophilization_world.data.repositories.FirestorePostsRepository

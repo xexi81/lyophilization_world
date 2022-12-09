@@ -1,7 +1,10 @@
 package com.los3molineros.lyophilization_world.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class Post(
     var title: String = "",
     var image: String? = null,
@@ -12,5 +15,5 @@ data class Post(
     var user: String? = null,
     var username: String? = null,
     var userPhoto: String? = null
-)
+): Parcelable
 

@@ -50,9 +50,7 @@ fun PostUI(
                     .padding(5.dp)
             ) {
                 Text(
-                    text = post.date
-                    .getPostDate()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+                    text = post.dateCreation!!.getPostDate().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 2.dp),
@@ -68,7 +66,7 @@ fun PostUI(
                     overflow = TextOverflow.Ellipsis
                 )
                 Image(
-                    painter = rememberImagePainter(post.photo),
+                    painter = rememberImagePainter(post.image),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -130,11 +128,11 @@ fun PostPreview() {
     PostUI(
         post = Post(
             title = "Reducing the Risks of Particles on the Outside of Vials",
-            photo = "https://static.wixstatic.com/media/748b64_803302ef623d4708bbab871929633a41~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80,enc_auto/748b64_803302ef623d4708bbab871929633a41~mv2.jpg",
+            image = "https://static.wixstatic.com/media/748b64_803302ef623d4708bbab871929633a41~mv2.jpg/v1/fill/w_600,h_400,al_c,q_80,enc_auto/748b64_803302ef623d4708bbab871929633a41~mv2.jpg",
             link = "https://www.lyophilizationworld.com/post/reducing-the-risks-of-particles-on-the-outside-of-vials",
-            date = Date(),
-            comments = listOf(),
-            favourites = listOf()
+            dateCreation = Date(),
+            postComments = mutableListOf(),
+            postFavourites = mutableListOf()
         ),
         comments = 4,
         favourite = false,

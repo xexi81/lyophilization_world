@@ -3,11 +3,14 @@ package com.los3molineros.lyophilization_world.data.model
 import java.util.*
 
 data class Post(
-    val title: String = "",
-    val photo: String = "",
-    val link: String = "",
-    val date: Date = Date(),
-    val comments: List<Comment> = listOf(),
-    val favourites: List<Favourite> = listOf()
+    var title: String = "",
+    var image: String? = null,
+    var link: String? = null,
+    var postComments: MutableList<PostComment> = mutableListOf(),
+    var postFavourites: MutableList<PostFavourite> = mutableListOf(),
+    var dateCreation: Date? = null,
+    var user: String? = null,
+    var username: String? = null,
+    var userPhoto: String? = null
 )
 

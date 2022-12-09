@@ -18,7 +18,6 @@ import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
 @Composable
 fun DrawerContentApp(
     onContactClick: () -> Unit = {},
-    onAboutUsClick: () -> Unit = {},
     onRateClick: () -> Unit = {},
     onSignOutClick: () -> Unit = {}
 ) {
@@ -34,7 +33,6 @@ fun DrawerContentApp(
             Spacer(modifier = Modifier.height(20.dp))
 
             DrawerRow(iconResource = R.drawable.ic_contact_us, stringResource = R.string.contact_us, onClick = {onContactClick()})
-            DrawerRow(iconResource = R.drawable.ic_about_us, stringResource = R.string.about_us, onClick = { onAboutUsClick()})
 
             Divider(thickness = 1.dp, modifier = Modifier.padding(vertical = 20.dp))
 

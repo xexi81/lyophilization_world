@@ -1,5 +1,7 @@
 package com.los3molineros.lyophilization_world.ui.screens
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.los3molineros.lyophilization_world.R
 import com.los3molineros.lyophilization_world.ui.composables.ButtonApp
 import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
@@ -35,6 +40,12 @@ fun SplashActivity(
     Lyophilization_worldTheme {
         val context = LocalContext.current
         val viewModel = koinViewModel<SplashScreenViewModel>()
+
+        val launcher =
+            rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+                viewModel.signWithGoogleCredentials(it)
+            }
+
 
         Box(Modifier.fillMaxSize()) {
             Column(
@@ -72,8 +83,13 @@ fun SplashActivity(
             }
 
             if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == true) {
-                viewModel.restartData()
                 continueToPost()
+                viewModel.restartData()
+            }
+
+            if (viewModel.alreadyLoggedWithGoogle) {
+                continueToPost()
+                viewModel.restartData()
             }
 
             if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == false) {
@@ -96,7 +112,7 @@ fun SplashActivity(
                         modifier = Modifier.height(50.dp),
                         textButton = context.getString(R.string.login_google),
                         image = R.drawable.ic_google,
-                        onClickButton = {}
+                        onClickButton = { viewModel.googleLogin = true}
                     )
                 }
             }
@@ -107,8 +123,15 @@ fun SplashActivity(
                 }
             }
         }
+
+        // User has clicked on google login
+        if (viewModel.googleLogin) {
+            viewModel.googleLogin = false
+            viewModel.loginWithGoogle(context, launcher)
+        }
     }
 }
+
 
 
 

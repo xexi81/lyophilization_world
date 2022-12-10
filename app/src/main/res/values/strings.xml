@@ -23,4 +23,8 @@
     <string name="email_error">Malformed email</string>
     <string name="user_pass_error">Email or Password incorrect. Please try again</string>
     <string name="restart_pass_ok">You will receive an email to restart your password</string>
+
+    <!-- Comment values -->
+    <string name="comentario_placeholder">Leave your thoughts here...</string>
+    <string name="post_comment">Post</string>
 </resources>

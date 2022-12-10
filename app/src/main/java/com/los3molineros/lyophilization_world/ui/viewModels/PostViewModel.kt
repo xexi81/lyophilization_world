@@ -3,6 +3,7 @@ package com.los3molineros.lyophilization_world.ui.viewModels
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -14,13 +15,14 @@ import com.los3molineros.lyophilization_world.common.AppConstants
 import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.data.model.User
 import com.los3molineros.lyophilization_world.domain.PostUseCase
+import com.los3molineros.lyophilization_world.ui.viewModels.interfaces.RefreshPostInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class PostViewModel(private val useCase: PostUseCase): ViewModel() {
+class PostViewModel(private val useCase: PostUseCase): ViewModel(), RefreshPostInterface {
     // Firebase user
     private val _firebaseUserState = MutableStateFlow<User?>(null)
     val firebaseUserState: StateFlow<User?> get() = _firebaseUserState.asStateFlow()
@@ -100,6 +102,13 @@ class PostViewModel(private val useCase: PostUseCase): ViewModel() {
                     .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .build()
             ).signOut()
+    }
+
+    override fun refreshPost(post: Post?) {
+        Log.d("TAG", "refreshPost: entro en interface de callback")
+        post?.let { newPost ->
+            _postListState.value.map { if (it.title == newPost.title) newPost}
+        }
     }
 
 }

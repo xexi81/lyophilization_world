@@ -1,9 +1,13 @@
 package com.los3molineros.lyophilization_world.ui
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.google.gson.Gson
+import com.los3molineros.lyophilization_world.data.model.AssetParamType
 import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.ui.screens.CommentsActivity
 import com.los3molineros.lyophilization_world.ui.screens.LoginWithEmailActivity
@@ -36,15 +40,21 @@ fun NavigationComponent() {
             PostActivity(
                 onBackClick = { navController.popBackStack() },
                 onCommentClick = { post ->
-                    navController.currentBackStackEntry?.arguments?.putParcelable("post", post)
-                    navController.navigate("commentsScreen")
+                    val json = Uri.encode(Gson().toJson(post))
+                    navController.navigate("commentsScreen/$json")
                 }
             )
         }
 
-        composable(route = "commentsScreen") {
-            val post = navController.previousBackStackEntry?.arguments?.getParcelable<Post>("post")
-            CommentsActivity(post = post)
+        composable(
+            route = "commentsScreen/{post}",
+            arguments = listOf(navArgument("post") {type = AssetParamType() })
+        ) {
+            val post = it.arguments?.getParcelable<Post>("post")
+            CommentsActivity(
+                post = post,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

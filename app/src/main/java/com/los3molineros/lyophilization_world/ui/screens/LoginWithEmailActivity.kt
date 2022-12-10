@@ -49,11 +49,25 @@ fun LoginWithEmailActivity(
                 Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Top
             ) {
-                EditTextApp(placeHolder = context.getString(R.string.email)) { viewModel.email = it }
+                EditTextApp(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = 16.dp),
+                    placeHolder = context.getString(R.string.email),
+                    onValueChanged = { viewModel.email = it }
+                )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                EditTextApp(placeHolder = context.getString(R.string.password)) { viewModel.password = it}
+                EditTextApp(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = 16.dp),
+                    placeHolder = context.getString(R.string.password),
+                    onValueChanged = { viewModel.password = it}
+                )
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

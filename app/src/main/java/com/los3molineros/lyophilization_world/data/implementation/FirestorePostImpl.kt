@@ -1,10 +1,12 @@
 package com.los3molineros.lyophilization_world.data.implementation
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.los3molineros.lyophilization_world.data.model.Post
-import com.los3molineros.lyophilization_world.data.model.PostFavourite
+import com.google.firebase.firestore.ktx.toObject
+import com.los3molineros.lyophilization_world.data.model.*
 import com.los3molineros.lyophilization_world.data.repositories.FirestorePostsRepository
+import com.los3molineros.lyophilization_world.ui.composables.CommentItem
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,6 +34,18 @@ class FirestorePostImpl(private val firebaseFirestore: FirebaseFirestore): Fires
         return post
     }
 
+    private suspend fun getCompletePost(title: String): PostResponse {
+        var postId: String = ""
+        var post: Post = Post()
+
+        firebaseFirestore.collection("posts").whereEqualTo("title", title).get().continueWith {
+            postId =  it.result.first().id
+            post = it.result.first().toObject(Post::class.java)
+        }.await()
+
+        return PostResponse(postId, post)
+    }
+
     override suspend fun setFavourite(userUid: String, title: String, postList: List<Post>) {
         val id = getPost(title = title)
         val currentDate: String = sdf.format(Date())
@@ -46,5 +60,27 @@ class FirestorePostImpl(private val firebaseFirestore: FirebaseFirestore): Fires
         firebaseFirestore.collection("posts").document(id).update("postFavourites", favourites).await()
     }
 
+    override suspend fun setComment(user: User, title: String, comment: String): Post {
+        val postResponse = getCompletePost(title)
+        val currentDate: String = sdf.format(Date())
+
+        val newComment = PostComment(
+            user = user.uid.orEmpty(),
+            userName = user.name.orEmpty(),
+            userPhoto = user.photo.orEmpty(),
+            date = currentDate,
+            comment = comment,
+            responses = listOf())
+
+
+        postResponse.post.postComments.add(newComment)
+
+        firebaseFirestore
+            .collection("posts")
+            .document(postResponse.id)
+            .update("postComments", postResponse.post.postComments).await()
+
+        return postResponse.post
+    }
 
 }

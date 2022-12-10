@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,9 @@ fun ButtonApp(
     onClickButton: () -> Unit = {},
     icon: Int? = null,
     isTextButton: Boolean = false,
-    image: Int? = null
+    image: Int? = null,
+    isTextBold: Boolean = false,
+    textColor: Color = Color.Unspecified
     ) {
     Lyophilization_worldTheme {
         val margin = if (icon==null) 5 else 0
@@ -35,7 +38,9 @@ fun ButtonApp(
                     text = textButton,
                     style = MaterialTheme.typography.body1,
                     modifier = modifier,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontWeight = if (isTextBold) FontWeight.Black else null,
+                    color = textColor
                 )
             }
         } else {
@@ -104,7 +109,8 @@ fun ButtonPreview() {
             modifier = Modifier.fillMaxWidth(),
             textButton = "Sign in",
             onClickButton = {},
-            isTextButton = true
+            isTextButton = true,
+            isTextBold = true
         )
 
         ButtonApp(

@@ -36,12 +36,12 @@ fun CommentItem(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(top = 5.dp)
                 .padding(start = if (principal) 5.dp else 55.dp)
+                .padding(bottom = 10.dp)
             ,
             verticalArrangement = Arrangement.Top,
         ) {
-            Row() {
+            Row {
                 Image(
                     if (comment.userPhoto == null) {
                         painterResource(id = R.drawable.profile)
@@ -123,7 +123,7 @@ fun CommentItem(
                 }
             }
 
-            if (principal) {
+            /*if (principal) {
                 Text(
                     text = "Responder",
                     modifier = Modifier
@@ -141,7 +141,7 @@ fun CommentItem(
                         comment = it
                     )
                 }
-            }
+            } */
         }
     }
 }

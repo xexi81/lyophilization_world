@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import com.los3molineros.lyophilization_world.ui.composables.CommentItem
 import com.los3molineros.lyophilization_world.ui.composables.EnterComment
 import com.los3molineros.lyophilization_world.ui.composables.TopBarApp
 import com.los3molineros.lyophilization_world.ui.viewModels.CommentViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,6 +49,8 @@ fun CommentsActivity(
 
     // Lateral panel
     val scaffoldState = rememberScaffoldState()
+    val scrollState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -83,7 +87,9 @@ fun CommentsActivity(
                 )
                 {
                         postState?.let {
-                            LazyColumn {
+                            LazyColumn(
+                                state = scrollState
+                            ) {
                                 items(items = it.postComments, itemContent = { item ->
                                     CommentItem(
                                         principal = true,
@@ -93,6 +99,8 @@ fun CommentsActivity(
                                 })
                             }
                         }
+
+                    scope.launch { scrollState.scrollToItem(postState?.postComments?.size ?: 0) }
                 }
 
                 Box(modifier = Modifier
@@ -107,6 +115,7 @@ fun CommentsActivity(
                         releaseComment = {
                             keyboardController?.hide()
                             viewModel.setComment()
+                            scope.launch { scrollState.scrollToItem(postState?.postComments?.size ?: 0) }
                         }
                     )
                 }

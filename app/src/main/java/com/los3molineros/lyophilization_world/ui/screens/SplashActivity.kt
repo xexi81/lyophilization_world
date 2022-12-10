@@ -11,6 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -27,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.los3molineros.lyophilization_world.R
+import com.los3molineros.lyophilization_world.data.model.User
 import com.los3molineros.lyophilization_world.ui.composables.ButtonApp
 import com.los3molineros.lyophilization_world.ui.theme.Lyophilization_worldTheme
 import com.los3molineros.lyophilization_world.ui.viewModels.SplashScreenViewModel
@@ -40,6 +43,9 @@ fun SplashActivity(
     Lyophilization_worldTheme {
         val context = LocalContext.current
         val viewModel = koinViewModel<SplashScreenViewModel>()
+
+        val userAlreadyLogged: Boolean? by viewModel.userAlreadyLoggedState.collectAsState()
+        val timeHasGone: Boolean? by viewModel.timeHasGoneState.collectAsState()
 
         val launcher =
             rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
@@ -82,7 +88,7 @@ fun SplashActivity(
                 }
             }
 
-            if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == true) {
+            if (timeHasGone == true && userAlreadyLogged == true) {
                 continueToPost()
                 viewModel.restartData()
             }
@@ -92,7 +98,7 @@ fun SplashActivity(
                 viewModel.restartData()
             }
 
-            if (viewModel.timeHasGone == true && viewModel.userAlreadyLoggedState.value == false) {
+            if (timeHasGone == true && userAlreadyLogged == false) {
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
@@ -118,7 +124,10 @@ fun SplashActivity(
             }
 
             viewModel.errorState.value?.let {
-                Snackbar(modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(3.dp)) {
+                Snackbar(modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(3.dp)) {
                     Text(text = it)
                 }
             }

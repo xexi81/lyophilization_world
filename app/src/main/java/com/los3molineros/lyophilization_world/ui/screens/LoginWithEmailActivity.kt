@@ -55,7 +55,8 @@ fun LoginWithEmailActivity(
                         .wrapContentHeight()
                         .padding(horizontal = 16.dp),
                     placeHolder = context.getString(R.string.email),
-                    onValueChanged = { viewModel.email = it }
+                    onValueChanged = { viewModel.email = it },
+                    text = viewModel.email
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -66,7 +67,8 @@ fun LoginWithEmailActivity(
                         .wrapContentHeight()
                         .padding(horizontal = 16.dp),
                     placeHolder = context.getString(R.string.password),
-                    onValueChanged = { viewModel.password = it}
+                    onValueChanged = { viewModel.password = it},
+                    text = viewModel.password
                 )
 
                 Row(

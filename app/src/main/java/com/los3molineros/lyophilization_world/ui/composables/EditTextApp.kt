@@ -26,16 +26,14 @@ fun EditTextApp(
     disabledIndicatorColor: Color = Color.LightGray,
     maxLines: Int = 1,
     textColor: Color = Color.Black,
+    text: String = ""
 ) {
     val inputValue = remember { mutableStateOf(TextFieldValue("")) }
         TextField(
             modifier = modifier,
-            value = inputValue.value,
+            value = text,
             maxLines = maxLines,
-            onValueChange = {
-                inputValue.value = it
-                onValueChanged(it.text)
-                            },
+            onValueChange = { onValueChanged(it) },
             placeholder = { Text(placeHolder, style = MaterialTheme.typography.body1) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,

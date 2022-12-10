@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -81,7 +82,7 @@ fun PostActivity(
                 }
             )},
             content = {
-                LazyColumn {
+                LazyColumn{
                     items(items = postList, itemContent = { item ->
                         PostUI(
                             post = item,
@@ -90,7 +91,9 @@ fun PostActivity(
                             adminUser = user?.admin ?: false,
                             imageClicked = { viewModel.imageClicked(context, item.link) },
                             favouriteClicked = { viewModel.favouriteClicked(item.title)},
-                            commentClicked = { onCommentClick(item) }
+                            commentClicked = {
+                                onCommentClick(item)
+                            }
                         )
                     })
                 }

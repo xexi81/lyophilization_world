@@ -71,12 +71,13 @@ fun EnterComment(
                     placeHolder = placeHolder,
                     onValueChanged = {
                         inputValue.value = it
-                        onValueChanged(it) },
+                        onValueChanged(inputValue.value) },
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     maxLines = 5,
-                    textColor = Color.White
+                    textColor = Color.White,
+                    text = inputValue.value
                 )
             }
 
@@ -86,7 +87,9 @@ fun EnterComment(
                 ButtonApp(
                     modifier = Modifier.align(Alignment.Center),
                     textButton = stringResource(id = R.string.post_comment),
-                    onClickButton = { releaseComment() },
+                    onClickButton = {
+                        releaseComment()
+                        inputValue.value = "" },
                     isTextButton = true,
                     isTextBold = true,
                     textColor = Color.Gray

@@ -1,7 +1,9 @@
 package com.los3molineros.lyophilization_world.ui
 
+import android.app.Activity
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +19,7 @@ import com.los3molineros.lyophilization_world.ui.screens.SplashActivity
 @Composable
 fun NavigationComponent() {
     val navController = rememberNavController()
+    val activity = (LocalContext.current as? Activity)
 
     NavHost(
         navController = navController,
@@ -38,7 +41,7 @@ fun NavigationComponent() {
 
         composable( route = "postScreen") {
             PostActivity(
-                onBackClick = { navController.popBackStack() },
+                onBackClick = { activity?.finish() },
                 onCommentClick = { post ->
                     val json = Uri.encode(Gson().toJson(post))
                     navController.navigate("commentsScreen/$json")
@@ -53,7 +56,11 @@ fun NavigationComponent() {
             val post = it.arguments?.getParcelable<Post>("post")
             CommentsActivity(
                 post = post,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.navigate("postScreen")
+                }
             )
         }
     }

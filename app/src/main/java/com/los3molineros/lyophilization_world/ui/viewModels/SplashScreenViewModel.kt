@@ -38,7 +38,9 @@ class SplashScreenViewModel(
     private val _errorState = MutableStateFlow<String?>(null)
     val errorState: StateFlow<String?> get() = _errorState.asStateFlow()
 
-    var timeHasGone: Boolean? by mutableStateOf(null)
+    private val _timeHasGoneState = MutableStateFlow<Boolean?>(false)
+    val timeHasGoneState: StateFlow<Boolean?> get() = _timeHasGoneState.asStateFlow()
+
     var googleLogin: Boolean by mutableStateOf(false)
     var alreadyLoggedWithGoogle: Boolean by mutableStateOf(false)
 
@@ -50,6 +52,7 @@ class SplashScreenViewModel(
 
     fun restartData() {
         _userAlreadyLoggedState.value = false
+        _timeHasGoneState.value = false
         googleLogin = false
         _errorState.value = null
         alreadyLoggedWithGoogle = false
@@ -58,7 +61,7 @@ class SplashScreenViewModel(
     private fun getDefaultTime() {
         viewModelScope.launch(Dispatchers.IO) {
             sleep(3000)
-            timeHasGone = true
+            _timeHasGoneState.value = true
         }
     }
 

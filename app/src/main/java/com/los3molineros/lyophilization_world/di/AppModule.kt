@@ -19,7 +19,6 @@ import com.los3molineros.lyophilization_world.ui.viewModels.CommentViewModel
 import com.los3molineros.lyophilization_world.ui.viewModels.LoginWithEmailViewModel
 import com.los3molineros.lyophilization_world.ui.viewModels.PostViewModel
 import com.los3molineros.lyophilization_world.ui.viewModels.SplashScreenViewModel
-import com.los3molineros.lyophilization_world.ui.viewModels.interfaces.RefreshPostInterface
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -31,7 +30,6 @@ val appModule = module {
     single<FirebaseAuthRepository>{FirebaseAuthImpl(get())}
     single<FirestoreUserRepository>{FirestoreUserImpl(get())}
     single<FirestorePostsRepository>{FirestorePostImpl(get())}
-    single<RefreshPostInterface>{get()}
 
     single { SplashScreenUseCase(get(), get()) }
     single { FirebaseLoginUseCase(get(), get()) }

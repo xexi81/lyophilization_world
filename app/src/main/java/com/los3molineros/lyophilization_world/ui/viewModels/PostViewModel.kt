@@ -3,7 +3,6 @@ package com.los3molineros.lyophilization_world.ui.viewModels
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -45,7 +44,6 @@ class PostViewModel(private val useCase: PostUseCase): ViewModel() {
     fun getPosts() {
         viewModelScope.launch(Dispatchers.IO)  {
             try {
-                Log.d("TAG", "getPosts: vuelvo a buscar")
                 _postListState.value = useCase.getPosts()
             } catch (e: Exception) {
                 _postListState.value = listOf()
@@ -59,24 +57,6 @@ class PostViewModel(private val useCase: PostUseCase): ViewModel() {
                 useCase.favouriteClicked(title, it, _postListState.value)
             }
         }
-    }
-
-    fun imageClicked(context: Context, link: String?) {
-        link?.let {
-            val goToLink = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(link)
-            )
-            context.startActivity(goToLink)
-        }
-    }
-
-    fun contactUs(context: Context) {
-        val goToLink = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse(AppConstants.CONTACT_US)
-        )
-        context.startActivity(goToLink)
     }
 
 

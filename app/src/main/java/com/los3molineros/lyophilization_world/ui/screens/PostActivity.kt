@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.los3molineros.lyophilization_world.R
+import com.los3molineros.lyophilization_world.common.AppConstants
 import com.los3molineros.lyophilization_world.data.model.Post
 import com.los3molineros.lyophilization_world.data.model.User
 import com.los3molineros.lyophilization_world.ui.composables.DrawerContentApp
@@ -35,7 +36,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PostActivity(
     onBackClick: () -> Unit = {},
-    onCommentClick: (Post) -> Unit = {}
+    onCommentClick: (Post) -> Unit = {},
+    onContactUsClick: (String) -> Unit = {},
+    onPostDetail: (String?) -> Unit = {}
 ) {
     Lyophilization_worldTheme {
         val context = LocalContext.current
@@ -74,7 +77,10 @@ fun PostActivity(
                 )
             },
             drawerContent = { DrawerContentApp(
-                onContactClick = { viewModel.contactUs(context) },
+                onContactClick = {
+                    //viewModel.contactUs(context)
+                                 onContactUsClick(AppConstants.CONTACT_US)
+                                 },
                 onRateClick = { viewModel.rateUs(context) },
                 onSignOutClick = {
                     viewModel.signOut(context)
@@ -89,7 +95,7 @@ fun PostActivity(
                             comments = item.postComments.size,
                             favourite = item.postFavourites.any { it.user == viewModel.firebaseUserState.value?.uid },
                             adminUser = user?.admin ?: false,
-                            imageClicked = { viewModel.imageClicked(context, item.link) },
+                            imageClicked = { onPostDetail(item.link) },
                             favouriteClicked = { viewModel.favouriteClicked(item.title)},
                             commentClicked = {
                                 onCommentClick(item)

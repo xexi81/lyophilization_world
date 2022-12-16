@@ -27,4 +27,7 @@
     <!-- Comment values -->
     <string name="comentario_placeholder">Leave your thoughts here...</string>
     <string name="post_comment">Post</string>
+
+    <!-- WebView values -->
+    <string name="web_view">WebView</string>
 </resources>

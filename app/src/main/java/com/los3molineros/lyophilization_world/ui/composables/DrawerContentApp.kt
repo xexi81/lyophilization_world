@@ -61,7 +61,8 @@ private fun DrawerRow(
         IconApp(
             resource = iconResource,
             size = 30.dp,
-            tint = Color.Black
+            tint = Color.Black,
+            iconClicked = { onClick() }
         )
         Text(
             modifier = Modifier.padding(start = 5.dp),

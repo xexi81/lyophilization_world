@@ -122,26 +122,6 @@ fun CommentItem(
                     }
                 }
             }
-
-            /*if (principal) {
-                Text(
-                    text = "Responder",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 15.dp)
-                        .padding(top = 5.dp)
-                        .padding(bottom = 10.dp)
-                        .clickable { onResponseClick(comment.uuid) },
-                    textAlign = TextAlign.End
-                )
-
-                comment.responses.forEach {
-                    CommentItem(
-                        principal = false,
-                        comment = it
-                    )
-                }
-            } */
         }
     }
 }
